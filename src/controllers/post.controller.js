@@ -1,7 +1,9 @@
 import postService from "../services/post.service.js";
+import {addPostSchema} from "../validator/post.validator.js";
 
 class PostController {
     async createPost(req, res,next) {
+        const {error} = addPostSchema.validate(req.body); //!validate TODO
         try{
             const post = await postService.createPost(req.params.author,req.body);
             return res.status(201).json(post);
