@@ -14,16 +14,13 @@ class PostService {
 
         })
         return post;
-        //TODO addPost data {
-        // 	"title": "JavaEE",
-        // 	"content": "Java is the best for backend",
-        // 	"tags":["Java", "Spring", "backend", "JEE"]
-        // }
-        //throw new Error('Not implemented');
+
     }
     async getPostById(id){
         const post = await repo.findPost(id);
-        if(!post) return null;
+        if(!post) {
+         throw new Error("Post not found");
+        }
         return post;
     }
 
