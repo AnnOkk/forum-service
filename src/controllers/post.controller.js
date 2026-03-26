@@ -32,8 +32,12 @@ class PostController {
     }
 
     async deletePost(req, res, next) {
-        //TODO handle service post deletion
-        throw new Error('Not implemented');
+        try{
+            const post = await postService.deletePost(req.params.id);
+            return res.status(200).json(post);
+        }catch(e){
+            return next(e);
+        }
     }
 
     async getPostsByAuthor(req, res, next) {

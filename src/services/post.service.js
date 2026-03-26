@@ -24,6 +24,14 @@ class PostService {
         return post;
     }
 
+    async deletePost(id){
+        const post = await repo.deletePost(id)
+        if(!post) {
+            throw new Error("Post not found");
+        }
+        return post;
+    }
+
 
 }
 export default new PostService;
