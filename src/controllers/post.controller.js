@@ -19,8 +19,13 @@ class PostController {
         }
     }
     async addLike(req,res,next){
-        //TODO handle service like addition
-        throw new Error('Not implemented');
+        try{
+            const post = await postService.addLike(req.params.id);
+            return res.json(post);
+        }
+        catch(e){
+            return next(e);
+        }
     }
 
     async deletePost(req,res,next){
@@ -33,16 +38,30 @@ class PostController {
     }
 
     async getPostsByAuthor(req,res,next){
-        //TODO handle service post retrieval by author
-        throw new Error('Not implemented');
+        try{
+            const posts = await postService.getPostsByAuthor(req.params.author); //berem iz route author,is not user!!
+            return res.json(posts);
+        }
+        catch(e){
+            return next(e);
+        }
     }
     async addComment(req,res,next){
-        //TODO handle service comment addition
-        throw new Error('Not implemented');
+        try{
+            const post = await postService.addComment(req.params.id,req.params.commenter,req.body.message); //poradok i kak nazyvaetsa napisan v service!
+            return res.json(post);
+        }catch(e){
+            return next(e);
+        }
     }
     async getPostsByTags(req,res,next){
-        //TODO handle service post retrieval by tags
-        throw new Error('Not implemented');
+       try{
+           const post = await postService.getPostsByTags(req.query.values); //zdes berem iz zaprosa,poetomy query.values,ne iz route
+           return res.json(post);
+       }
+       catch(e){
+           return next(e);
+       }
     }
     async getPostsByPeriod(req,res,next){
         //TODO handle service post retrieval by period

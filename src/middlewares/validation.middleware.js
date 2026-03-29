@@ -5,7 +5,12 @@ const  schemas = {
         title: Joi.string().required(),
         content: Joi.string().required(),
         tags: Joi.array().items(Joi.string())
-
+    }),
+    addComment: Joi.object({
+        message: Joi.string().required() //!!!
+    }),
+    getPostsByTags: Joi.object({
+        values: Joi.array().items(Joi.string()).required()
     })
 };
 

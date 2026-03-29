@@ -24,23 +24,38 @@ class PostService {
     }
 
     async addLike(id) {
-        //TODO addLike id
-        throw new Error('Not implemented');
+       const post = await postRepository.addLike(id)
+        if(!post){
+           throw new Error(`Post with id = ${id} not found`);
+        }
+        return post;
     }
 
     async getPostsByAuthor(author) {
-        //TODO getPostsByAuthor author
-        throw new Error('Not implemented');
+        const posts = await postRepository.getPostsByAuthor(author);
+        if(!posts){
+            throw new Error(`Posts by author = ${author} not found`);
+        }
+        return posts;
     }
 
     async addComment(id, commenter, content) {
-        //TODO addComment id,commenter,content
-        throw new Error('Not implemented');
+        const post = await postRepository.addComment(id,commenter,content);
+        if(!post){
+            throw new Error(`Post with id = ${id} not found`);
+        }
+        return post;
+
     }
 
     async getPostsByTags(tagsString) {
-        //TODO getPostsByTags tagsString
-        throw new Error('Not implemented');
+       const tags = tagsString.split(',').map(tag=>tag.trim().toLowerCase())
+
+        const post = await postRepository.getPostsByTags(tags);
+        if(post.length === 0){
+            throw new Error(`Post with tags = ${tags} not found`); //TODO why is validation dont work?
+        }
+        return post;
     }
 
     async getPostsByPeriod(dateFrom, dateTo) {
