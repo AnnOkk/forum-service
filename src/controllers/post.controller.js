@@ -13,7 +13,7 @@ class PostController {
     async getPostById(req,res,next){
         try{
             const post = await postService.getPostById(req.params.id);
-            return res.status(200).json(post);
+            return res.json(post);
         }catch(e){
             return next(e);
         }
@@ -24,8 +24,12 @@ class PostController {
     }
 
     async deletePost(req,res,next){
-        //TODO handle service post deletion
-        throw new Error('Not implemented');
+       try{
+           const post = await postService.deletePost(req.params.id);
+           return res.json(post);
+       }catch(e){
+           return next(e);
+       }
     }
 
     async getPostsByAuthor(req,res,next){
