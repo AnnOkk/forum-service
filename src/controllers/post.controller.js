@@ -64,12 +64,24 @@ class PostController {
        }
     }
     async getPostsByPeriod(req,res,next){
-        //TODO handle service post retrieval by period
-        throw new Error('Not implemented');
+
+        try{
+            const post = await postService.getPostsByPeriod(req.query.dateFrom,req.query.dateTo)
+
+            return res.json(post);
+
+        }catch(e){
+            return next(e);
+        }
+
     }
     async updatePost(req,res,next){
-        //TODO handle service post update
-        throw new Error('Not implemented');
+        try{
+            const post = await postService.updatePost(req.params.id,req.body);
+            return res.json(post);
+        }catch(e){
+            return next(e);
+        }
     }
 }
 

@@ -60,12 +60,18 @@ class PostService {
     }
 
     async getPostsByPeriod(dateFrom, dateTo) {
-        //TODO getPostsByPeriod period
-        throw new Error('Not implemented');
+        const post = await postRepository.getPostsByPeriod(dateFrom,dateTo);
+        if(!post){
+            throw new Error(`Post with period = ${dateFrom} - ${dateTo} not found`);
+        }
+        return post;
     }
     async updatePost(id,data){
-        //TODO updatePost id,data
-        throw new Error('Not implemented');
+        const post = await postRepository.updatePost(id,data);
+        if(!post){
+            throw new Error(`Post with id = ${id} not found`);
+        }
+        return post;
     }
 
 }

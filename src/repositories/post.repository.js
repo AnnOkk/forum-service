@@ -46,6 +46,22 @@ class PostRepository {
         const regexTags = tagsString.map(tag => new RegExp(`^${tag}$`, 'i'))
         return Post.find({tags: {$in: regexTags}}) //tags = kak v dokumente napisano!!!!
     }
+
+    async getPostsByPeriod(dateFrom, dateTo) {
+        return Post.find({
+            dateCreated: {
+                $gte: dateFrom,
+                $lte: dateTo
+            }
+        })
+    }  //TODO + regex?
+
+    async updatePost(id,data){
+        return Post.findByIdAndUpdate(
+            id, data, {returnDocument:'after'}
+        )
+    }
 }
+
 
 export default new PostRepository();

@@ -11,22 +11,38 @@ const  schemas = {
     }),
     getPostsByTags: Joi.object({
         values: Joi.string().required()
+    }),getPostsByPeriod: Joi.object({
+        dateFrom: Joi.date().required(),
+        dateTo: Joi.date().required()
+    }),
+    updatePost: Joi.object({
+        title: Joi.string(),
+        tags: Joi.array().items(Joi.string()),
+        content: Joi.string()
+
     })
 };
 
 
-const validate = (schemaName) => (req,res,next) => {
+const validate = (schemaName,source = 'body') => (req,res,next) => {
+    console.log('MIDDLEWARE START');
+    console.log('schemaName:', schemaName);
+    console.log('source:', source);
+    console.log('req[source]:', req[source]);
+
+
     const schema = schemas[schemaName];
     if(!schema){
         return next(new Error('Invalid schema name'));
     }
-    const {error} = schema.validate(req.body) //!!!where is function seek data to validate
+    const data = req[source];
+    const {error} = schema.validate(data) //!!!where is function seek data to validate
     if(error){
         return res.status(400).send({
             message: error.details[0].message,
             code: 400,
-            status: 'Bad Request',
-            timestamp: new Date().toISOString(),
+            status: `Bad Request ${source}`,
+            timestamp: new Date().toISOString().slice(0,19),
             path: req.path
 
         })
@@ -34,22 +50,5 @@ const validate = (schemaName) => (req,res,next) => {
     return next();
 }
 
-export const validateReqQuery = (schemaName)=> (req,res,next) => {
-    const schema = schemas[schemaName];
-    if(!schema){
-        return next(new Error('Invalid schema name'));
-    }
-    const {error} = schema.validate(req.query)
-    if(error){
-        return res.status(400).send({
-            message: error.details[0].message,
-            code: 400,
-            status: 'Bad Request(query)',
-            timestamp: new Date().toISOString(),
-            path: req.path
-        })
-    }
-    return next();
-}
 
 export default validate;
