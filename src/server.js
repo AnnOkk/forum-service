@@ -14,7 +14,7 @@ app.use('/forum',postRoutes)
 app.use(errorHandler)
 
 
-//TODO;
+
 const connectDB = async ()=>{
     try {
         await mongoose.connect(config.mongodb.uri,config.mongodb.db)

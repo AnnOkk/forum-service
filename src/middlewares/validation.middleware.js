@@ -25,10 +25,10 @@ const  schemas = {
 
 
 const validate = (schemaName,source = 'body') => (req,res,next) => {
-    console.log('MIDDLEWARE START');
-    console.log('schemaName:', schemaName);
-    console.log('source:', source);
-    console.log('req[source]:', req[source]);
+    // console.log('MIDDLEWARE START');
+    // console.log('schemaName:', schemaName);
+    // console.log('source:', source);
+    // console.log('req[source]:', req[source]);
 
 
     const schema = schemas[schemaName];
