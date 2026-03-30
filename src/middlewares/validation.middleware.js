@@ -10,7 +10,7 @@ const  schemas = {
         message: Joi.string().required() //!!!
     }),
     getPostsByTags: Joi.object({
-        values: Joi.array().items(Joi.string()).required()
+        values: Joi.string().required()
     })
 };
 
@@ -20,7 +20,7 @@ const validate = (schemaName) => (req,res,next) => {
     if(!schema){
         return next(new Error('Invalid schema name'));
     }
-    const {error} = schema.validate(req.body);
+    const {error} = schema.validate(req.body) //!!!where is function seek data to validate
     if(error){
         return res.status(400).send({
             message: error.details[0].message,
@@ -29,6 +29,24 @@ const validate = (schemaName) => (req,res,next) => {
             timestamp: new Date().toISOString(),
             path: req.path
 
+        })
+    }
+    return next();
+}
+
+export const validateReqQuery = (schemaName)=> (req,res,next) => {
+    const schema = schemas[schemaName];
+    if(!schema){
+        return next(new Error('Invalid schema name'));
+    }
+    const {error} = schema.validate(req.query)
+    if(error){
+        return res.status(400).send({
+            message: error.details[0].message,
+            code: 400,
+            status: 'Bad Request(query)',
+            timestamp: new Date().toISOString(),
+            path: req.path
         })
     }
     return next();

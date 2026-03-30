@@ -51,6 +51,7 @@ class PostService {
     async getPostsByTags(tagsString) {
        const tags = tagsString.split(',').map(tag=>tag.trim().toLowerCase())
 
+
         const post = await postRepository.getPostsByTags(tags);
         if(post.length === 0){
             throw new Error(`Post with tags = ${tags} not found`); //TODO why is validation dont work?
