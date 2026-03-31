@@ -23,33 +23,41 @@ class PostService {
     }
 
     async addLike(id) {
-        // TODO add like to post by id
-        throw new Error('Not implemented');
+        const post = await postRepository.addLike(id);
+        if (!post) {
+            throw new Error(`Post with id = ${id} not found`);
+        }
+        return post;
     }
 
     async getPostsByAuthor(author) {
-        // TODO get posts by author
-        throw new Error('Not implemented');
+        return await postRepository.findPostByAuthor(author);
     }
 
     async addComment(id, commenter, content) {
-        // TODO add comment to post by id
-        throw new Error('Not implemented');
+        const comment = {user: commenter, message: content};
+        const post = await postRepository.addComment(id, comment);
+        if (!post) {
+            throw new Error(`Post with id = ${id} not found`);
+        }
+        return post;
     }
 
     async getPostsByTags(tagsString) {
-        // TODO get posts by tags
-        throw new Error('Not implemented');
+        const tags = tagsString.split(',').map(tag => tag.trim());
+        return await postRepository.findPostsByTags(tags);
     }
 
     async getPostsByPeriod(dateFrom, dateTo) {
-        // TODO get posts by period
-        throw new Error('Not implemented');
+        return await postRepository.findPostsByPeriod(new Date(dateFrom), new Date(dateTo));
     }
 
     async updatePost(id, data) {
-        // TODO update post by id
-        throw new Error('Not implemented');
+        const post = await postRepository.updatePost(id, data);
+        if (!post) {
+            throw new Error(`Post with id = ${id} not found`);
+        }
+        return post;
     }
 }
 
