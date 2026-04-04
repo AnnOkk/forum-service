@@ -1,56 +1,80 @@
 import postService from "../services/post.service.js";
 
 class PostController {
-    async createPost(req, res,next) {
-        try{
-            const post = await postService.createPost(req.params.author,req.body);
+    async createPost(req, res, next) {
+        try {
+            const post = await postService.createPost(req.params.author, req.body);
             return res.status(201).json(post);
-        }catch(e){
-           return  next(e);
+        } catch (e) {
+            return next(e);
         }
 
     }
-    async getPostById(req,res,next){
-        try{
+
+    async getPostById(req, res, next) {
+        try {
             const post = await postService.getPostById(req.params.id);
             return res.json(post);
-        }catch(e){
+        } catch (e) {
             return next(e);
         }
     }
-    async addLike(req,res,next){
-        //TODO handle service like addition
-        throw new Error('Not implemented');
+
+    async addLike(req, res, next) {
+        try {
+            await postService.addLike(req.params.id);
+            return res.sendStatus(204);
+        } catch (e) {
+            return next(e);
+        }
     }
 
-    async deletePost(req,res,next){
-       try{
-           const post = await postService.deletePost(req.params.id);
-           return res.json(post);
-       }catch(e){
-           return next(e);
-       }
+    async deletePost(req, res, next) {
+        try {
+            const post = await postService.deletePost(req.params.id);
+            return res.json(post);
+        } catch (e) {
+            return next(e);
+        }
     }
 
-    async getPostsByAuthor(req,res,next){
-        //TODO handle service post retrieval by author
-        throw new Error('Not implemented');
+    async getPostsByAuthor(req, res, next) {
+        return res.json(await postService.getPostsByAuthor(req.params.author));
     }
-    async addComment(req,res,next){
-        //TODO handle service comment addition
-        throw new Error('Not implemented');
+
+    async addComment(req, res, next) {
+        try {
+            const post = await postService.addComment(req.params.id, req.params.commenter, req.body.message);
+            return res.json(post);
+        } catch (e) {
+            return next(e);
+        }
     }
-    async getPostsByTags(req,res,next){
-        //TODO handle service post retrieval by tags
-        throw new Error('Not implemented');
+
+    async getPostsByTags(req, res, next) {
+        let values = req.query.values;
+        if (Array.isArray(req.query.values)) {
+         values = req.query.values.join(',');
+        }
+        return res.json(await postService.getPostsByTags(values)); //query name smotrim v body! query. ...
     }
-    async getPostsByPeriod(req,res,next){
-        //TODO handle service post retrieval by period
-        throw new Error('Not implemented');
+
+    async getPostsByPeriod(req, res, next) {
+        try{
+            const {dateFrom,dateTo} = req.query;
+            return res.json( await postService.getPostsByPeriod(dateFrom,dateTo));
+        }catch (e){
+            return next(e);
+        }
     }
-    async updatePost(req,res,next){
-        //TODO handle service post update
-        throw new Error('Not implemented');
+
+    async updatePost(req, res, next) {
+        try{
+            const post = await postService.updatePost(req.params.id,req.body);
+            return res.json(post);
+        }catch (e){
+            return next(e);
+        }
     }
 }
 
