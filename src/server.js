@@ -11,6 +11,8 @@ app.use(express.json());
 
 app.use('/forum',postRoutes)
 
+//app.use('/:url',postRoutes);
+
 app.use(errorHandler)
 
 
