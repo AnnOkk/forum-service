@@ -9,9 +9,9 @@ const router = Router();
 
 router.post('/:url/register',userAccountController.createUserAccount);
 router.post('/:url/login',userAccountController.loginUser);
-router.delete('/:url/user/:accountUser',userAccountController.deleteUser);
-router.patch('/:url/user/:accountUser',userAccountController.updateUser);
-router.patch('/:url/user/:accountUser/role:role')
+router.delete('/:url/user/:user',userAccountController.deleteUser);
+router.patch('/:url/user/:user',userAccountController.updateUser);
+router.patch('/:url/user/:user/role:role')
 
 
 

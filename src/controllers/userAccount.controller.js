@@ -1,12 +1,23 @@
+import userAccountService from "../services/userAccount.service.js";
+
 class UserAccountController {
     async createUserAccount(req, res, next) {
-        //TODO handle user register
-        throw new Error('Not implemented');
+        try{
+            const user = await userAccountService.createUserAccount(req.params.url,req.body);
+            return res.status(201).json(user);
+        }
+        catch (e){
+            return next(e);
+        }
     }
 
     async loginUser(req, res, next) {
-        //TODO handle user login
-        throw new Error('Not implemented');
+       try{
+           const success = await userAccountService.loginUser(req.params.url);
+           return res.json(success);
+       }catch(e){
+           return next(e);
+       }
     }
 
     async deleteUser(req, res, next) {

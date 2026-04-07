@@ -1,10 +1,10 @@
-const errorHandler = (err,req,res,next) => {
+const accountErrorHandler = (err,req,res,next) => {
     console.log(err.stack)
-    const contains = err.message.toLowerCase().includes('not found');
+    const contains = err.message.toLowerCase().includes('conflict');
     if(err.message && contains){
-        return res.status(404).json({
+        return res.status(401).json({
             "timestamp": new Date().toISOString(),
-            "status": 404,
+            "status": 401,
             "error": "Not Found",
             "message": err.message,
             "path": `${req.path}`
@@ -20,4 +20,4 @@ const errorHandler = (err,req,res,next) => {
     })
 }
 
-export default errorHandler;
+export default accountErrorHandler;
