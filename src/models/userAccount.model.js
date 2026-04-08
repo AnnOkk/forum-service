@@ -5,13 +5,13 @@ const userAccountSchema = new mongoose.Schema({
         password: {type: String, unique: true, required: true},
         firstName: {type: String, required: true},
         lastName: {type: String, required: true},
-        roles: {type: [String], default: []}
+        roles: {type: [String], default: ['USER']}
     },
     {
         versionKey: false,
         toJSON: {
             transform: (doc, ret) => {
-                ret.id = ret._id; //???todo
+                //ret.id = ret._id; //???
                 delete ret._id;
                 delete ret.password;
                 return ret;
@@ -19,7 +19,7 @@ const userAccountSchema = new mongoose.Schema({
         },
         toObject: {
             transform: (doc, ret) => {
-                ret.id = ret._id;
+                //ret.id = ret._id;
                 delete ret._id;
                 delete ret.password;
                 return ret;
