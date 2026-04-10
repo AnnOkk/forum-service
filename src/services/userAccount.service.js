@@ -45,8 +45,10 @@ class UserAccountService {
     }
 
     async changePassword(login, newPassword) {
-        // TODO: Implement password change logic
-        throw new Error('Not implemented');
+        const userAccount = await userAccountRepository.changePassword(login, newPassword);
+        if (!userAccount) {
+            throw new Error(`User with login '${login}' not found`);
+        }
     }
 
     async getUser(login) {
