@@ -28,14 +28,7 @@ class UserAccountRepository {
     }
 
     async changePassword(login, newPassword) {
-        //return UserAccount.findByIdAndUpdate(login,{password:newPassword},{new:true})
-        let user = await UserAccount.findById(login)
-        if (!user) {
-            return null
-        }
-        user.password = newPassword;
-        return await user.save();
-
+        return UserAccount.findByIdAndUpdate(login,{password:newPassword},{new:true})
     }
 
 
