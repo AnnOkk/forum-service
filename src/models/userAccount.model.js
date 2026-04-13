@@ -40,7 +40,7 @@ const userAccountSchema = new Schema({
 userAccountSchema.pre('save',async function(){
     if(this.isModified('password')){
         const salt = await bcrypt.genSalt(12);
-        this.password = await bcrypt.hash(this.password,salt);
+        this.password = await bcrypt.hash(this.password,salt) //???must be $set control?
     }
     userAccountSchema.pre('findOneAndUpdate',async function(){
         if(this.getUpdate().password){  //getUpdate for query
