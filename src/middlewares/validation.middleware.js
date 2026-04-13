@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const schemas = {
+export const postSchemas = {
     createPost: Joi.object({
         title: Joi.string().required(),
         content: Joi.string().required(),
@@ -21,12 +21,12 @@ const schemas = {
     })
 }
 
-const validate = (schemaName, target = 'body') => (req, res, next) => {
-    const schema = schemas[schemaName];
-    if (!schema) {
-        return next(new Error('Invalid schema name'));
+export const validate = (schema, target = 'body') => (req, res, next) => {
+
+    if (!schema){
+        return next(new Error('Schema is required'));
     }
-    const {error} = schema.validate(req[target]);
+    const {error,value} = schema.validate(req[target]);
     if (error) {
         return res.status(400).send({
             message: error.details[0].message,
@@ -36,6 +36,7 @@ const validate = (schemaName, target = 'body') => (req, res, next) => {
             path: req.path
         });
     }
+    req.validated = value;
     return next();
 }
 

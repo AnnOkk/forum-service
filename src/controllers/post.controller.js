@@ -59,8 +59,12 @@ class PostController {
         return res.json(await postService.getPostsByTags(values));
     }
 
+    // async getPostsByPeriod(req, res, next) {
+    //     const {dateFrom, dateTo} = req.query;
+    //     return res.json(await postService.getPostsByPeriod(dateFrom, dateTo));
+    // }
     async getPostsByPeriod(req, res, next) {
-        const {dateFrom, dateTo} = req.query;
+        const {dateFrom, dateTo} = req.validated;
         return res.json(await postService.getPostsByPeriod(dateFrom, dateTo));
     }
 

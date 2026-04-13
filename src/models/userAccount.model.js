@@ -1,4 +1,5 @@
 import {Schema,model} from "mongoose";
+import bcrypt from "bcrypt";
 
 const userAccountSchema = new Schema({
     _id:{
@@ -19,8 +20,11 @@ const userAccountSchema = new Schema({
         required:true
     },
     roles:{
-        type:[String],
-        default:['USER']
+        roles: {
+            type: [String],
+            enum: ['USER', 'MODERATOR', 'ADMIN'], //TODO: change to enum
+            default: ['USER']
+        }
     }
 },{
     versionKey:false,
@@ -33,5 +37,11 @@ const userAccountSchema = new Schema({
     }
     }
 )
+userAccountSchema.pre('save',async function(){
+    if(this.isModified('password')){
+        const salt = await bcrypt.genSalt(12);
+        this.password = await bcrypt.hash(this.password,salt);
+    }
 
+})
 export default model('UserAccount',userAccountSchema,'users');
