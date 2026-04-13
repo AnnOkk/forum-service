@@ -1,4 +1,5 @@
 import userAccountRepository from "../repositories/userAccount.repository.js";
+import bcrypt from "bcrypt";
 
 class UserAccountService {
     async register(user) {
@@ -43,7 +44,8 @@ class UserAccountService {
     }
 
     async changePassword(login,newPassword){
-        const userAccount = await userAccountRepository.changePassword(login,newPassword);
+        const hashPassword = await bcrypt.hash(newPassword,10);
+        const userAccount = await userAccountRepository.changePassword(login,hashPassword);
         if(!userAccount){
             throw new Error(`User with login ${login} not found`);
         }
