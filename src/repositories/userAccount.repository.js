@@ -22,14 +22,23 @@ class UserAccountRepository {
     }
 
     async removeRole(login, role) {
-        return UserAccount.findByIdAndUpdate(  login,
-            { $pull: { roles: role } },
-            { returnDocument: 'after' })
+        return UserAccount.findByIdAndUpdate(login,
+            {$pull: {roles: role}},
+            {returnDocument: 'after'})
     }
-    async changePassword(login,newPassword){
-        return UserAccount.findByIdAndUpdate(login,{password:newPassword},{new:true})
+
+    async changePassword(login, newPassword) {
+        //return UserAccount.findByIdAndUpdate(login,{password:newPassword},{new:true})
+        let user = await UserAccount.findById(login)
+        if (!user) {
+            return null
+        }
+        user.password = newPassword;
+        return await user.save();
+
     }
 
 
 }
+
 export default new UserAccountRepository();
