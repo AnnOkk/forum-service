@@ -42,12 +42,13 @@ userAccountSchema.pre('save',async function(){
         const salt = await bcrypt.genSalt(12);
         this.password = await bcrypt.hash(this.password,salt) //???must be $set control?
     }
-    userAccountSchema.pre('findOneAndUpdate',async function(){
-        if(this.getUpdate().password){  //getUpdate for query
-            const salt = await bcrypt.genSalt(12);
-            this.getUpdate().password = await bcrypt.hash(this.getUpdate().password,salt);
-        }
-    })
-
 })
+
+userAccountSchema.pre('findOneAndUpdate',async function(){
+    if(this.getUpdate().password){  //getUpdate for query
+        const salt = await bcrypt.genSalt(12);
+        this.getUpdate().password = await bcrypt.hash(this.getUpdate().password,salt);
+    }
+})
+
 export default model('UserAccount',userAccountSchema,'users');

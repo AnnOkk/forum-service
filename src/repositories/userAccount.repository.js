@@ -28,7 +28,9 @@ class UserAccountRepository {
     }
 
     async changePassword(login, newPassword) {
-        return UserAccount.findByIdAndUpdate(login,{password:newPassword},{new:true})
+        // return UserAccount.findByIdAndUpdate(login,{password:newPassword},{new:true})
+        return UserAccount.findOneAndUpdate(login,{password:newPassword},{new:true})
+
     }
 
 
