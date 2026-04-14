@@ -1,5 +1,6 @@
 import {Schema, model} from "mongoose";
 import bcrypt from "bcrypt";
+import {USER} from "../configuration/constants.js";
 
 const userAccountSchema = new Schema({
     _id: {
@@ -21,7 +22,7 @@ const userAccountSchema = new Schema({
     },
     roles: {
         type: [String],
-        default: ['USER']
+        default: [USER]
     }
 }, {
     versionKey: false,

@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import {ADMIN, MODERATOR, USER} from "../configuration/constants.js";
 
 const schemas = {
     createPost: Joi.object({
@@ -18,6 +19,23 @@ const schemas = {
     dateFormat: Joi.object({
         dateFrom: Joi.date().iso().required(),
         dateTo: Joi.date().iso().required().greater(Joi.ref('dateFrom')),
+    }),
+
+    register: Joi.object({
+        login: Joi.string().required(),
+        password: Joi.string().required(),
+        firstName: Joi.string().required(),
+        lastName: Joi.string().required()
+    }),
+
+    updateUser: Joi.object({
+        firstName: Joi.string(),
+        lastName: Joi.string(),
+    }),
+
+    changeRoles: Joi.object({
+        role: Joi.string().valid(USER, MODERATOR, ADMIN).insensitive().required(),
+        login: Joi.string().required()
     })
 }
 

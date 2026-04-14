@@ -5,29 +5,33 @@ class UserAccountRepository {
         return UserAccount.create(user);
     }
 
-    async findUser(login){
+    async findUser(login) {
         return UserAccount.findById(login).exec();
     }
 
-    async removeUser(login){
+    async removeUser(login) {
         return UserAccount.findByIdAndDelete(login).exec();
     }
 
-    async updateUser(login, updateData){
+    async updateUser(login, updateData) {
         return UserAccount.findByIdAndUpdate(login, updateData, {new: true}).exec();
     }
 
-    async addRole(login, role){
+    async addRole(login, role) {
         // return UserAccount.findByIdAndUpdate(login, {$addToSet: {roles: role}}, {new: true}).select('login roles').exec();
         return UserAccount.findByIdAndUpdate(login, {$addToSet: {roles: role}}, {new: true}).exec();
     }
 
-    async removeRole(login, role){
+    async removeRole(login, role) {
         return UserAccount.findByIdAndUpdate(login, {$pull: {roles: role}}, {new: true}).exec();
     }
 
-    async changePassword(login, newPassword){
-        return UserAccount.findByIdAndUpdate(login, {password: newPassword}, {new: true}).exec();
+    async changePassword(login, newPassword) {
+        const user = await UserAccount.findById(login);
+        if (user) {
+            user.password = newPassword;
+            return user.save();
+        }
     }
 }
 
