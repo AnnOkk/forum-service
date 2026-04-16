@@ -1,22 +1,32 @@
 import UserAccount from "../models/userAccount.model.js";
 
 const authentication = async (req, res, next) => {
-    if (req.path !== '/account/register' && req.path !== '/forum/posts') {
-        const authorization = req.headers.authorization;
-        if (!authorization || !authorization.startsWith('Basic ')) {
-            return res.status(401).json({message: 'Authorization required'});
-        }
-        const base64Credentials = authorization.split(' ')[1];
-        const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-        const [login, password] = credentials.split(':');
-        const userAccount = await UserAccount.findById(login);
-        if (!userAccount || !(await userAccount.comparePassword(password))) {
-            return res.status(401).json({message: 'Invalid credentials'});
-        }
-        req.headers.authorization = '';
-        req.principal = {userName: login, roles: userAccount.roles}
+    const isPublic =
+        req.path === '/account/register' ||
+        req.path.startsWith('/forum/posts/author/') ||
+        req.path === '/forum/posts/tags' ||
+        req.path === '/forum/posts/period';
+
+    if (isPublic) {
+        return next();
     }
+
+    const authorization = req.headers.authorization;
+    if (!authorization || !authorization.startsWith('Basic ')) {
+        return res.status(401).json({message: 'Authorization required'});
+    }
+    const base64Credentials = authorization.split(' ')[1];
+    const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+    const [login, password] = credentials.split(':');
+    const userAccount = await UserAccount.findById(login);
+    if (!userAccount || !(await userAccount.comparePassword(password))) {
+        return res.status(401).json({message: 'Invalid credentials'});
+    }
+    req.headers.authorization = '';
+    req.principal = {userName: login, roles: userAccount.roles}
     next();
 }
+
+
 
 export default authentication;
