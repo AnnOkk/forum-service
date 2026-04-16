@@ -1,6 +1,80 @@
-import {ADMIN} from "../configuration/constants.js";
+import {ADMIN, MODERATOR} from "../configuration/constants.js";
+import PostRepository from "../repositories/post.repository.js";
 
 class Authorization {
+    isAuthenticated() {
+        return (req, res, next) => {
+            if (!req.principal) {
+                return res.status(401).json({message: 'Authorization required'});
+            }
+            return next();
+        }
+    }
+
+    isAuthor() {
+        return async (req, res, next) => {
+            try {
+                console.log('req.params.id:', req.params.id);
+                console.log('principal:', req.principal);
+
+                if (!req.principal) {
+                    return res.status(401).json({message: 'Authorization required'});
+                }
+                const post = await PostRepository.findPostById(req.params.id);
+                console.log('found post:', post);
+                if (!post) {
+                    return res.status(404).json({message: 'Post not found'});
+                }
+
+                if (req.principal.userName !== post.author) {
+                    return res.status(403).json({message: 'Access denied'});
+                }
+                return next();
+            } catch (e) {
+                return next(e);
+            }
+        }
+    }
+
+    isAuthorOrModerator() {
+        return async (req, res, next) => {
+            try {
+                if (!req.principal) {
+                    return res.status(401).json({message: 'Authorization required'});
+                }
+                const post = await PostRepository.findPostById(req.params.id)
+                if (!post) {
+                    return res.status(404).json({message: 'Post not found'});
+                }
+                const isAuthor = req.principal.userName === post.author;
+                const isModerator = req.principal.roles.includes(MODERATOR)
+                const isAdmin = req.principal.roles.includes(ADMIN);
+
+                if (!isAuthor && !isModerator &&!isAdmin) {
+                    return res.status(403).json({message: 'Access denied'});
+                }
+                return next();
+            } catch (e) {
+                return next(e);
+            }
+        }
+    }
+
+    isAuthorParam(paramName = 'author') {
+        return (req, res, next) => {
+            console.log('principal:', req.principal?.userName);
+            console.log('param author:', req.params[paramName]);
+            if (!req.principal) {
+                return res.status(401).json({message: 'Authorization required'});
+            }
+            if (req.principal.userName !== req.params[paramName]) {
+                return res.status(403).json({message: 'Access denied'});
+            }
+            return next();
+        }
+    }
+
+
     isOwner() {
         return (req, res, next) => {
             console.log('principal:', req.principal.userName);
@@ -41,16 +115,17 @@ class Authorization {
     hasRole(role) {
         return (req, res, next) => {
             if (!req.principal) {
-                return res.status(401).json({ message: 'Authorization required' });
+                return res.status(401).json({message: 'Authorization required'});
             }
 
             if (!req.principal.roles.includes(role.toUpperCase().trim())) {
-                return res.status(403).json({ message: 'Access denied' });
+                return res.status(403).json({message: 'Access denied'});
             }
 
             return next();
         };
-    }}
+    }
+}
 
 
 export default new Authorization();
