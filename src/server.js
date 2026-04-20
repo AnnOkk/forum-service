@@ -6,17 +6,13 @@ import errorHandler from "./middlewares/error.middleware.js";
 import userAccountRoutes from "./routes/userAccount.routes.js";
 import authentication from "./middlewares/authentication.middleware.js";
 import {createAdmin} from "./configuration/initAdmin.js";
-import authorization from "./middlewares/authorization.middleware.js";
-import {ADMIN} from "./configuration/constants.js";
+import authorizationRouter from "./routes/authorization.routes.js";
 
 const app = express();
-const authorizationRouter = Router();
 
 app.use(express.json());
 app.use(authentication);
-// authorizationRouter.patch('/account/user/:login/role/:role', authorization.hasRole(ADMIN))
-// authorizationRouter.delete('/account/user/:login/role/:role', authorization.hasRole(ADMIN))
-authorizationRouter.all('/account/user/:login/role/:role', authorization.hasRole(ADMIN))
+
 
 app.use(authorizationRouter)
 app.use('/forum', postRoutes)
