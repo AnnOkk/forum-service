@@ -1,5 +1,5 @@
 import postService from "../services/post.service.js";
-import { USER } from "../configuration/constants.js";
+
 
 class Authorization {
     hasRole(role) {
