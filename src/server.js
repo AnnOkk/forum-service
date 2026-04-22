@@ -11,6 +11,19 @@ import authorizationRouter from "./routes/authorization.routes.js";
 const app = express();
 
 app.use(express.json());
+
+
+//const allowedOrigins = ['http://localhost:3000'];
+// app.use(cors(
+//     {
+//         origin: allowedOrigins,
+//         methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//         allowedHeaders: ['Content-Type', 'Authorization']
+//     }
+// ));
+
+
+app.use(cors())// all
 app.use(authentication);
 
 
